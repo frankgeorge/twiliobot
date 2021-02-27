@@ -1,5 +1,6 @@
 from flask import Flask, request
 from twilio.twiml.messaging_response import MessagingResponse
+from utils import fetch_reply
 
 app = Flask(__name__)
 
@@ -11,10 +12,12 @@ def hello():
 def sms_reply():
     #fetch message
     msg = request.form.get('Body')
+    phone_no = request.form.get('From')
+    reply = fetch_reply(msg, phone_no)
 
     #reply
     resp=MessagingResponse()
-    resp.message("You said that:{}".format(msg))
+    resp.message(reply)
 
     return str(resp)
 
